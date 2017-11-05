@@ -89,7 +89,6 @@ function Get-VstsWorkItem
 
     $result = Invoke-VstsEndpoint `
         -Session $Session `
-        -Project $Project `
         -Path $path `
         @additionalInvokeParameters
 

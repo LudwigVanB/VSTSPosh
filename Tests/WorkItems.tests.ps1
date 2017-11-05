@@ -41,6 +41,23 @@ Describe 'Work items' -Tags 'Integration' {
             $script:workItem.Fields.'System.Title' | Should Be 'This is a test work item'
             $script:workItem.Fields.'System.Description' | Should Be 'Test'
         }
+
+        It 'Should find a work item' {
+            { $script:createdWorkItem = New-VstsWorkItem `
+                    -Session $session `
+                    -WorkItemType 'Task' `
+                    -Project $projectName `
+                    -PropertyHashtable @{
+                    'System.Title'       = 'This is a work item I want to find'
+                    'System.Description' = 'Test'
+                } `
+                    -Verbose } | Should Not Throw
+            { $script:foundWorkItem = Get-VstsWorkItem `
+                    -Session $session `
+                    -Id $script:createdWorkItem.Id `
+                    -Verbose } | Should Not Throw
+            $script:foundWorkItem.Fields.'System.Title' | Should Be 'This is a work item I want to find'
+            }
     }
 
     AfterAll {
